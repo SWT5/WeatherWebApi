@@ -23,5 +23,9 @@ namespace WeatherWebApi.Models
 
         //Lon: double (gps koordinaten longitude).
         public double _Lon { get; set; }
+
+        public WeatherForecast WeatherForecast { get; set; }
+
+
     }
 }

@@ -14,7 +14,7 @@ namespace WeatherWebApi.Models
         //sted- består af felterne: -  Navn,  Lat, Lon
         public Place Place { get; set; }
 
-        //public string placeFK { get; set; }
+        public string placeFK { get; set; }
 
         //Temperatur – i grader celcius med 1 decimals nøjagtighed
         public int TemperatureC { get; set; }

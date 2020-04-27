@@ -14,13 +14,23 @@ namespace WeatherWebApi.Data
         {
         }
         public DbSet<WeatherForecast> WeatherForecastList { get; set; }
-        //public DbSet<Place> Places { get; set; }
+        public DbSet<Place> Places { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Models.WeatherForecast>().HasKey(W => new {W.Date, W.Place});
-            //modelBuilder.Entity<Models.Place>().HasKey(P => new {P._Name});
+            modelBuilder.Entity<WeatherForecast>().HasKey(W => new {W.Date, W.placeFK});
+            modelBuilder.Entity<Place>().HasKey(P => new {P._Name});
+
+
+            //realations
+
+            modelBuilder.Entity<Place>()
+                .HasOne(p => p.WeatherForecast)
+                .WithOne(w => w.Place)
+                .HasForeignKey<WeatherForecast>(w => w.placeFK);
+            
         }
+
 
 
     }
