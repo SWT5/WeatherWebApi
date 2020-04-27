@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,11 @@ namespace WeatherWebApi.Models
     {
         //Tidspunkt (dato og klokkeslæt)
         public DateTime Date { get; set; }
+
+        //sted- består af felterne: -  Navn,  Lat, Lon
+        public Place Place { get; set; }
+
+        //public string placeFK { get; set; }
 
         //Temperatur – i grader celcius med 1 decimals nøjagtighed
         public int TemperatureC { get; set; }
@@ -20,19 +26,6 @@ namespace WeatherWebApi.Models
 
         //Lufttryk – i millibar med 1 decimals nøjagtighed.
         public double AirPressure { get; set; }
-
-        //sted- består af felterne: -  Navn,  Lat, Lon
-        public Place Place { get; set; }
-
-        //navn på lokalitet
-        public string Name { get; set; }
-
-        //Lat: double (gps koordinaten latitude).
-        public double Lat { get; set; }
-
-        //Lon: double (gps koordinaten longitude).
-        public double Lon { get; set; }
-
 
 
         public string Summary { get; set; }
