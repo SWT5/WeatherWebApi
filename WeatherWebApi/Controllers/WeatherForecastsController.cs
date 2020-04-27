@@ -97,7 +97,8 @@ namespace WeatherWebApi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetWeatherForecast", new { id = weatherForecast.Date }, weatherForecast);
+            //return CreatedAtAction("GetWeatherForecast", new { id = weatherForecast.Date }, weatherForecast);
+            return CreatedAtAction(nameof(GetWeatherForecast), new {id = weatherForecast.Date}, weatherForecast);
         }
 
         // DELETE: api/WeatherForecasts/5

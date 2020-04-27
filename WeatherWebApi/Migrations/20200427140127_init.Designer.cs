@@ -10,7 +10,7 @@ using WeatherWebApi.Data;
 namespace WeatherWebApi.Migrations
 {
     [DbContext(typeof(WeatherForecastContext))]
-    [Migration("20200427133016_init")]
+    [Migration("20200427140127_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
