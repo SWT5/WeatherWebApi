@@ -4,90 +4,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WeatherWebApi.Models;
+using WeatherWebApi.Services;
 
 namespace WeatherWebApi.Controllers
 {
+    [Route("api/[controller/{id}/{id2}")]
+    [ApiController]
     public class BoundaryDatesController : Controller
     {
-        // GET: BoundaryDates
-        public ActionResult Index()
+        private readonly IWeatherStationCrud _servicesForecast;
+
+        public BoundaryDatesController(IWeatherStationCrud service)
         {
-            return View();
+            _servicesForecast = service;
         }
 
-        // GET: BoundaryDates/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public IEnumerable<WeatherForecast> Get(DateTime tsOne, DateTime tsTwo)
         {
-            return View();
+            return _servicesForecast.Get()
+                .Where(wf => (DateTime.Compare(wf.Date, tsOne) >= 0) &&
+                             (DateTime.Compare(wf.Date, tsOne) <= 0))
+                .ToList();
         }
 
-        // GET: BoundaryDates/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: BoundaryDates/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: BoundaryDates/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: BoundaryDates/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: BoundaryDates/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: BoundaryDates/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
