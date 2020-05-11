@@ -17,6 +17,7 @@ namespace WeatherWebApi.Models
         int Humidity { get; set; }
         double AirPressure { get; set; }
     }
+
     public class WeatherForecast: IWeatherForecast
     {
         [BsonId]
