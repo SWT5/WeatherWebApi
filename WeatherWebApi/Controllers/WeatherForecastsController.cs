@@ -14,7 +14,7 @@ namespace WeatherWebApi.Controllers
     [ApiController]
     public class WeatherForecastsController : ControllerBase
     {
-        private readonly WeatherForecastContext _context;
+        private readonly IWeatherForecast _context;
 
         public WeatherForecastsController(WeatherForecastContext context)
         {

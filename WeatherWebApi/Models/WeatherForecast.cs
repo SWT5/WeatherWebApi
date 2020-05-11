@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,18 +8,29 @@ using System.Threading.Tasks;
 
 namespace WeatherWebApi.Models
 {
-    public class WeatherForecast
+    public interface IWeatherForecast
     {
+        string Id { get; set; }
+        DateTime Date { get; set; }
+        Place Place { get; set; }
+        double TemperatureC { get; set; }
+        int Humidity { get; set; }
+        double AirPressure { get; set; }
+    }
+    public class WeatherForecast: IWeatherForecast
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        //Id
+        public string Id { get; set; }
         //Tidspunkt (dato og klokkeslæt)
         public DateTime Date { get; set; }
 
         //sted- består af felterne: -  Navn,  Lat, Lon
         public Place Place { get; set; }
 
-        public string placeFK { get; set; }
-
         //Temperatur – i grader celcius med 1 decimals nøjagtighed
-        public int TemperatureC { get; set; }
+        public double TemperatureC { get; set; }
 
         //public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
@@ -26,8 +39,12 @@ namespace WeatherWebApi.Models
 
         //Lufttryk – i millibar med 1 decimals nøjagtighed.
         public double AirPressure { get; set; }
+    }
 
-
-        public string Summary { get; set; }
+    public class Place
+    {
+        public string Name { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

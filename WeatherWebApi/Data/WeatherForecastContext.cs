@@ -7,31 +7,47 @@ using WeatherWebApi.Models;
 
 namespace WeatherWebApi.Data
 {
-    public class WeatherForecastContext : DbContext
+    public interface IWeatherStationDBSettings
     {
-        public WeatherForecastContext(DbContextOptions<WeatherForecastContext> options)
-            : base(options)
-        {
-        }
-        public DbSet<WeatherForecast> WeatherForecastList { get; set; }
-        public DbSet<Place> Places { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<WeatherForecast>().HasKey(W => new {W.Date, W.placeFK});
-            modelBuilder.Entity<Place>().HasKey(P => new {P._Name});
-
-
-            //realations
-
-            modelBuilder.Entity<Place>()
-                .HasOne(p => p.WeatherForecast)
-                .WithOne(w => w.Place)
-                .HasForeignKey<WeatherForecast>(w => w.placeFK);
-            
-        }
-
-
-
+        string weatherStationCollection { get; set; }
+        string userCollection { get; set; }
+        string connectionString { get; set; }
+        string DBName { get; set; }
     }
+
+    public class WeatherStationDBSettings: IWeatherStationDBSettings
+    {
+        public string weatherStationCollection { get; set; }
+        public string userCollection { get; set; }
+        public string connectionString { get; set; }
+        public string DBName { get; set; }
+    }
+
+    //public class WeatherForecastContext : DbContext
+    //{
+    //    public WeatherForecastContext(DbContextOptions<WeatherForecastContext> options)
+    //        : base(options)
+    //    {
+    //    }
+    //    public DbSet<WeatherForecast> WeatherForecastList { get; set; }
+    //    public DbSet<Place> Places { get; set; }
+
+    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //    {
+    //        modelBuilder.Entity<WeatherForecast>().HasKey(W => new {W.Date, W.placeFK});
+    //        modelBuilder.Entity<Place>().HasKey(P => new {P._Name});
+
+
+    //        //realations
+
+    //        modelBuilder.Entity<Place>()
+    //            .HasOne(p => p.WeatherForecast)
+    //            .WithOne(w => w.Place)
+    //            .HasForeignKey<WeatherForecast>(w => w.placeFK);
+
+    //    }
+
+
+
+}
 }
