@@ -19,10 +19,10 @@ namespace WeatherWebApi.Controllers
     [ApiController]
     public class WeatherForecastsController : ControllerBase
     {
-        private readonly WeatherStationCrud.IWeatherStationCrud _service;
+        private readonly IWeatherStationCrud _service;
         private readonly IHubContext<Updates> _hubContext;
 
-        public WeatherForecastsController(WeatherStationCrud.IWeatherStationCrud service, IHubContext<Updates> hubContext)
+        public WeatherForecastsController(IWeatherStationCrud service, IHubContext<Updates> hubContext)
         {
             _hubContext = hubContext;
             _service = service;
@@ -71,27 +71,29 @@ namespace WeatherWebApi.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize]
-        public ActionResult<WeatherForecast> PostWeatherObservation(WeatherForecast weatherObservation)
+        public ActionResult<WeatherForecast> PostWeatherForecast(WeatherForecast weatherForecast)
         {
-            _service.Create(weatherObservation);
+            _service.Create(weatherForecast);
 
-            _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherObservation));
+            _hubContext.Clients.All.SendAsync("sendMessage", JsonConvert.)
 
-            return CreatedAtRoute("GetObs", new { id = weatherObservation.Id.ToString() }, weatherObservation);
+            //_hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherForecast));
+
+            return CreatedAtRoute("GetObs", new { id = weatherForecast.Id.ToString() }, weatherForecast);
         }
 
         // DELETE: api/WeatherForecasts/5
         [HttpDelete("{id}")]
-        public ActionResult<WeatherForecast> DeleteWeatherObservation(string id)
+        public ActionResult<WeatherForecast> DeleteWeatherForecast(string id)
         {
-            var book = _service.Get(id);
+            var weather = _service.Get(id);
 
-            if (book == null)
+            if (weather == null)
             {
                 return NotFound();
             }
 
-            _service.Remove(book);
+            _service.Remove(weather.Id);
 
             return NoContent();
         }

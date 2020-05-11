@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeatherWebApi.Models;
 using WeatherWebApi.Services;
@@ -33,5 +29,26 @@ namespace WeatherWebApi.Controllers
 
             return user;
         }
+
+        [HttpPost("Register"), AllowAnonymous]
+        public ActionResult<Token> Register([FromBody] login UserInput)
+        {
+            if (_service.Get(UserInput.UserName) != null)
+            {
+                return BadRequest(new { errorMessage = "UserName exists in the Database "});
+            }
+
+            user User = new user();
+            User.UserName = UserInput.UserName.ToLower();
+            User.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(UserInput.Password, 10); // Workfactor set 10
+
+            _service.Create(user);
+
+            var jwtToken = new DTOToken();
+            jwtToken.Token = GenerateToken(user.Username);
+
+            return CreatedAtAction("Get", new { id = user.Username }, jwtToken);
+        }
+
     }
 }
