@@ -31,7 +31,7 @@ namespace WeatherWebApi.Controllers
         }
 
         [HttpPost("Register"), AllowAnonymous]
-        public ActionResult<Token> Register([FromBody] login UserInput)
+        public ActionResult<token> Register([FromBody] login UserInput)
         {
             if (_service.Get(UserInput.UserName) != null)
             {
@@ -42,12 +42,12 @@ namespace WeatherWebApi.Controllers
             User.UserName = UserInput.UserName.ToLower();
             User.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(UserInput.Password, 10); // Workfactor set 10
 
-            _service.Create(user);
+            _service.Create(User);
 
-            var jwtToken = new DTOToken();
-            jwtToken.Token = GenerateToken(user.Username);
+            var jwtToken = new token();
+            jwtToken.Token = GenerateToken(User.UserName);
 
-            return CreatedAtAction("Get", new { id = user.Username }, jwtToken);
+            return CreatedAtAction("Get", new { id = User.UserName }, jwtToken);
         }
 
     }
