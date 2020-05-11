@@ -47,7 +47,7 @@ namespace WeatherWebApi.Controllers
 
             user user = new user();
             user.UserName = UserInput.UserName.ToLower();
-            user.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(UserInput.Password, 11); // Workfactor is set to 11
+            user.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(UserInput.Password, 12); // Workfactor is set to 12 - hashing part
 
             _service.Create(user);
 
