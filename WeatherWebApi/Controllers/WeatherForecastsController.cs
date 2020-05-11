@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson.IO;
 using WeatherWebApi.Data;
 using WeatherWebApi.Models;
+using WeatherWebApi.Services;
+using WeatherWebApi.Hubs;
 
 namespace WeatherWebApi.Controllers
 {
@@ -14,25 +19,25 @@ namespace WeatherWebApi.Controllers
     [ApiController]
     public class WeatherForecastsController : ControllerBase
     {
-        private readonly IWeatherForecast _context;
+        private readonly WeatherStationCrud.IWeatherStationCrud _service;
+        private readonly IHubContext<Updates> _hubContext;
 
-        public WeatherForecastsController(WeatherForecastContext context)
+        public WeatherForecastsController(WeatherStationCrud.IWeatherStationCrud service, IHubContext<Updates> hubContext)
         {
-            _context = context;
+            _hubContext = hubContext;
+            _service = service;
         }
 
         // GET: api/WeatherForecasts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WeatherForecast>>> GetWeatherForecastList()
-        {
-            return await _context.WeatherForecastList.ToListAsync();
-        }
+        public ActionResult<IEnumerable<WeatherForecast>> GetWeatherObservations() =>
+            _service.Get();
 
         // GET: api/WeatherForecasts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<WeatherForecast>> GetWeatherForecast(DateTime id)
+        [HttpGet("{id}", Name = "GetObs")]
+        public ActionResult<WeatherForecast> GetWeatherObservation(string id)
         {
-            var weatherForecast = await _context.WeatherForecastList.FindAsync(id);
+            var weatherForecast = _service.Get(id);
 
             if (weatherForecast == null)
             {
@@ -46,30 +51,17 @@ namespace WeatherWebApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeatherForecast(DateTime id, WeatherForecast weatherForecast)
+        [Authorize]
+        public IActionResult PutWeatherObservation(string id, WeatherForecast weatherForecast)
         {
-            if (id != weatherForecast.Date)
+            var obs = _service.Get(id);
+
+            if (obs == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(weatherForecast).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WeatherForecastExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _service.Update(id, weatherForecast);
 
             return NoContent();
         }
@@ -78,48 +70,30 @@ namespace WeatherWebApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<WeatherForecast>> PostWeatherForecast(WeatherForecast weatherForecast)
+        [Authorize]
+        public ActionResult<WeatherForecast> PostWeatherObservation(WeatherForecast weatherObservation)
         {
-            _context.WeatherForecastList.Add(weatherForecast);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (WeatherForecastExists(weatherForecast.Date))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _service.Create(weatherObservation);
 
-            //return CreatedAtAction("GetWeatherForecast", new { id = weatherForecast.Date }, weatherForecast);
-            return CreatedAtAction(nameof(GetWeatherForecast), new {id = weatherForecast.Date}, weatherForecast);
+            _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherObservation));
+
+            return CreatedAtRoute("GetObs", new { id = weatherObservation.Id.ToString() }, weatherObservation);
         }
 
         // DELETE: api/WeatherForecasts/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WeatherForecast>> DeleteWeatherForecast(DateTime id)
+        public ActionResult<WeatherForecast> DeleteWeatherObservation(string id)
         {
-            var weatherForecast = await _context.WeatherForecastList.FindAsync(id);
-            if (weatherForecast == null)
+            var book = _service.Get(id);
+
+            if (book == null)
             {
                 return NotFound();
             }
 
-            _context.WeatherForecastList.Remove(weatherForecast);
-            await _context.SaveChangesAsync();
+            _service.Remove(book);
 
-            return weatherForecast;
-        }
-
-        private bool WeatherForecastExists(DateTime id)
-        {
-            return _context.WeatherForecastList.Any(e => e.Date == id);
+            return NoContent();
         }
     }
 }
