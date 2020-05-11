@@ -30,9 +30,11 @@ namespace WeatherWebApi
         {
             //services.AddDbContext<WeatherForecastContext>(opt =>
             //    opt.UseInMemoryDatabase("weatherForecastList"));
-            services.AddDbContext<WeatherForecastContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<WeatherForecastContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddRazorPages();
+            services.AddSignalR();
             services.AddControllers();
         }
 
@@ -52,7 +54,7 @@ namespace WeatherWebApi
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }
