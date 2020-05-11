@@ -76,7 +76,7 @@ namespace WeatherWebApi.Test
             //Arrange
             var controller = new WeatherForecastsController();
             // Act
-            var model=(controller.)
+            var model = (controller);
 
         }
         
