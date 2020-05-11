@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Crypto.Generators;
 using WeatherWebApi.Models;
 using WeatherWebApi.Services;
 
@@ -60,29 +61,29 @@ namespace WeatherWebApi.Controllers
         public ActionResult<token> Login([FromBody] login loginUser)
         {
             loginUser.UserName = loginUser.UserName.ToLower();
-            var user = _service.Get(loginUser.UserName);
+            var user = _service.GetUser(loginUser.UserName);
             if (user != null)
             {
-                var validPass = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.HashedPassword);
-                if (validPass) return new DTOToken { Token = GenerateToken(user.Username) };
+                var validPass = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHashed);
+                if (validPass) return new token { Token = GenerateToken(user.UserName) };
             }
 
-            ModelState.AddModelError(string.Empty, "Brugernavn eller Password er forkert");
+            ModelState.AddModelError(string.Empty, "Username or Password is incorrect.");
             return BadRequest(ModelState);
         }
 
-        private string GenerateToken(string username)
+        private string GenerateToken(string Username)
         {
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Name, Username),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Shhhhhh the key is a secret")),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Sorry the key is a secret")),
                     SecurityAlgorithms.HmacSha256)),
                 new JwtPayload(claims));
 
