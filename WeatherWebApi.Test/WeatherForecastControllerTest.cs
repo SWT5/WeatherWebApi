@@ -22,7 +22,7 @@ namespace WeatherWebApi.Test
         [Fact]
         public void TestForCorrectReturns()
         {
-            
+
             var mock = new Mock<IWeatherStationCrud>();
             mock.Setup(mock => mock.Get())
                 .Returns(GetTestWeatherForecast);
@@ -66,7 +66,22 @@ namespace WeatherWebApi.Test
             });
             return forecast;
 
+            //Assert that forecast has been added correctly.
+            //Assert.Equal();
         }
+        
+        [Fact]
+        public void IndexActionModelIsCompleted()
+        {
+            //Arrange
+            var controller = new WeatherForecastsController();
+            // Act
+            var model=(controller.)
+
+        }
+        
+
+
     }
-    
+
 }
