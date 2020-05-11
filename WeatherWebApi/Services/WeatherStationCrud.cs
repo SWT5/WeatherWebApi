@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using MongoDB.Driver;
 using WeatherWebApi.Models;
 using WeatherWebApi.Data;
 
@@ -39,20 +37,20 @@ namespace WeatherWebApi.Services
             public WeatherForecast Get(string id) =>
                 _weatherForecast.Find<WeatherForecast>(wo => wo.Id == id).FirstOrDefault();
 
-            public WeatherObservation Create(WeatherObservation book)
+            public WeatherForecast Create(WeatherForecast book)
             {
-                _weatherObservations.InsertOne(book);
+                _weatherForecast.InsertOne(book);
                 return book;
             }
 
-            public void Update(string id, WeatherObservation weatherObservation) =>
-                _weatherObservations.ReplaceOne(wo => wo.ID == id, weatherObservation);
+            public void Update(string id, WeatherForecast weatherForecast) =>
+                _weatherForecast.ReplaceOne(wo => wo.Id == id, weatherForecast);
 
-            public void Remove(WeatherObservation weatherObservation) =>
-                _weatherObservations.DeleteOne(wo => wo.ID == weatherObservation.ID);
+            public void Remove(WeatherForecast weatherForecast) =>
+                _weatherForecast.DeleteOne(wo => wo.Id == weatherForecast.Id);
 
             public void Remove(string id) =>
-                _weatherObservations.DeleteOne(wo => wo.ID == id);
+                _weatherForecast.DeleteOne(wo => wo.Id == id);
         }
     }
 }
