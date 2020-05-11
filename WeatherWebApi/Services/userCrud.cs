@@ -1,8 +1,6 @@
-﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using WeatherWebApi.Data;
 using WeatherWebApi.Models;
 
@@ -32,7 +30,7 @@ namespace WeatherWebApi.Services
         public List<user> Get() =>
            _users.Find(book => true).ToList();
 
-        public user Get(string id) =>
+        public user GetUser(string id) =>
             _users.Find<user>(u => u.UserName == id).FirstOrDefault();
 
         public user Create(user book)

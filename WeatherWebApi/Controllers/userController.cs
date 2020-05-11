@@ -20,35 +20,9 @@ namespace WeatherWebApi.Controllers
         [HttpGet("Register/{id}"), AllowAnonymous]
         public ActionResult<user> Get(string userName)
         {
-            var user = _service.Get(userName);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
+         
         }
 
-        [HttpPost("Register"), AllowAnonymous]
-        public ActionResult<token> Register([FromBody] login UserInput)
-        {
-            if (_service.Get(UserInput.UserName) != null)
-            {
-                return BadRequest(new { errorMessage = "UserName exists in the Database "});
-            }
-
-            user User = new user();
-            User.UserName = UserInput.UserName.ToLower();
-            User.PasswordHashed = BCrypt.Net.BCrypt.HashPassword(UserInput.Password, 10); // Workfactor set 10
-
-            _service.Create(User);
-
-            var jwtToken = new token();
-            jwtToken.Token = GenerateToken(User.UserName);
-
-            return CreatedAtAction("Get", new { id = User.UserName }, jwtToken);
-        }
 
     }
 }
