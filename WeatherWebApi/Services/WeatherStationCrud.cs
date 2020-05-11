@@ -37,7 +37,7 @@ namespace WeatherWebApi.Services
                 _weatherForecast.Find(book => true).ToList();
 
             public WeatherForecast Get(string id) =>
-                _weatherForecast.Find<WeatherForecast>(wo => wo. == id).FirstOrDefault();
+                _weatherForecast.Find<WeatherForecast>(wo => wo.Id == id).FirstOrDefault();
 
             public WeatherObservation Create(WeatherObservation book)
             {
