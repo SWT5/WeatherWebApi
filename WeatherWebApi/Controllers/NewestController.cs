@@ -8,6 +8,8 @@ using WeatherWebApi.Services;
 
 namespace WeatherWebApi.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class NewestController : ControllerBase
     {
         private readonly IWeatherStationCrud _service;

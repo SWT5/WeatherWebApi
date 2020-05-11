@@ -8,7 +8,9 @@ using WeatherWebApi.Services;
 
 namespace WeatherWebApi.Controllers
 {
-    public class DateController : ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+	public class DateController : ControllerBase
     {
 	    private readonly IWeatherStationCrud _service;
 
