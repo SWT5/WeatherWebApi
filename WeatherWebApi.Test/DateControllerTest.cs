@@ -13,21 +13,24 @@ namespace WeatherWebApi.Test
         [Fact]
         public void ForecastResultDate()
         {
+            //create fake weatherStationCrud
             var mock = new Mock<IWeatherStationCrud>();
             mock.Setup(mock => mock.Get())
                 .Returns(GetDummyDataWeatherForecasts);
 
+            //real object of datecontroller with the fake as parameter
             var controller = new DateController(mock.Object);
 
             var DateTest = new DateTime(2019, 10, 20);
 
-            var TestList = controller.Get(DateTest);
+            var ListOfTests = controller.Get(DateTest);
 
-            Assert.Collection(TestList, item=> Assert.Contains("TD20 #1", item.Id),
+            Assert.Collection(ListOfTests, item=> Assert.Contains("TD20 #1", item.Id),
                 item => Assert.Contains("TD20 #2", item.Id));
-            Assert.All(TestList, item => Assert.DoesNotContain("TD10", item.Id));
+            Assert.All(ListOfTests, item => Assert.DoesNotContain("TD10", item.Id));
         }
 
+        // DUMMY DATA
         private List<WeatherForecast> GetDummyDataWeatherForecasts()
         {
             var place = new Place();
@@ -53,7 +56,7 @@ namespace WeatherWebApi.Test
             });
             forecasts.Add(new WeatherForecast()
             {
-                Id = "TD26",
+                Id = "TD10",
                 Date = new DateTime(2019, 10, 10),
                 Place = place,
                 TemperatureC = 34,
