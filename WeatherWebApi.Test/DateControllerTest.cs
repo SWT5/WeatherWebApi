@@ -19,13 +19,13 @@ namespace WeatherWebApi.Test
 
             var controller = new DateController(mock.Object);
 
-            var DateTest = new DateTime(2017, 12, 24);
+            var DateTest = new DateTime(2019, 10, 20);
 
             var TestList = controller.Get(DateTest);
 
-            Assert.Collection(TestList, item=> Assert.Contains("TestDay24 no. 1", item.Id),
-                item => Assert.Contains("TestDay24 no. 2", item.Id));
-            Assert.All(TestList, item => Assert.DoesNotContain("TestDay26", item.Id));
+            Assert.Collection(TestList, item=> Assert.Contains("TD20 #1", item.Id),
+                item => Assert.Contains("TD20 #2", item.Id));
+            Assert.All(TestList, item => Assert.DoesNotContain("TD10", item.Id));
         }
 
         private List<WeatherForecast> GetDummyDataWeatherForecasts()
@@ -35,30 +35,30 @@ namespace WeatherWebApi.Test
             var forecasts = new List<WeatherForecast>();
             forecasts.Add(new WeatherForecast()
             {
-                Id = "TestDay24 no. 1",
-                Date = new DateTime(2017, 12, 24),
+                Id = "TD20 #1",
+                Date = new DateTime(2019, 10, 20),
                 Place = place,
-                TemperatureC = 20,
-                Humidity = 60,
+                TemperatureC = 24,
+                Humidity = 50,
+                AirPressure = 20
+            });
+            forecasts.Add(new WeatherForecast()
+            {
+                Id = "TD20 #2",
+                Date = new DateTime(2019, 10, 20),
+                Place = place,
+                TemperatureC = 28,
+                Humidity = 65,
                 AirPressure = 15
             });
             forecasts.Add(new WeatherForecast()
             {
-                Id = "TestDay24 no. 2",
-                Date = new DateTime(2017, 12, 24),
+                Id = "TD26",
+                Date = new DateTime(2019, 10, 10),
                 Place = place,
-                TemperatureC = 22,
-                Humidity = 70,
+                TemperatureC = 34,
+                Humidity = 85,
                 AirPressure = 10
-            });
-            forecasts.Add(new WeatherForecast()
-            {
-                Id = "TestDay26",
-                Date = new DateTime(2017, 12, 26),
-                Place = place,
-                TemperatureC = 30,
-                Humidity = 90,
-                AirPressure = 5
             });
             return forecasts;
         }
