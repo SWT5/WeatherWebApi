@@ -78,7 +78,7 @@ namespace WeatherWebApi
 
             app.UseCors(builder =>
             {
-	            builder.WithOrigins("https://localhost:44341", "http://localhost:44341", "localhost:44341")
+	            builder.WithOrigins("https://localhost:44341", "http://localhost:44341","https://localhost:44370",  "localhost:44341")
 		            .AllowAnyMethod()
 		            .AllowAnyHeader()
 		            .AllowCredentials();

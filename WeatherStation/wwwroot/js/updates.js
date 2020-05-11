@@ -1,49 +1,26 @@
 ﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44341/updates").build();
+//var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44370/Updates").build();
+
 
 connection.start();
 
 var delay = 500;
 setTimeout(function() {
-	connection.invoke("SendMsg");
+	connection.invoke("sendMessage");
 },
     delay
 );
 
-connection.on("SendMsg",
-	function(msg) {
+connection.on("sendMessage",
+	function(message) {
 		var li = document.createElement("li");
-		li.textContent = msg;
+		li.textContent = message;
 		document.getElementById("messagesList").appendChild(li);
     });
 
 
-/*
-"use strict";
-
-var connection = new
-    signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:44357/liveUpdate")
-    .build();
-
-connection.start();
-
-var delay = 750;
-setTimeout(function () {
-    connection.invoke("SendMessage");
-},
-    delay);
-
-connection.on("SendMessage", function (message) {
-    var li = document.createElement("li");
-
-    li.textContent = message;
-
-    document.getElementById("messagesList").appendChild(li);
-});
-
-*/
 
 //connection.on("ReceiveMessage", function (user, message) {
 //    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
