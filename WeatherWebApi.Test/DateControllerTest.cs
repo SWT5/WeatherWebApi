@@ -1,5 +1,9 @@
-using System;
 using Xunit;
+using WeatherWebApi.Models;
+using WeatherWebApi.Services;
+using Moq;
+using System;
+using System.Collections.Generic;
 
 namespace WeatherWebApi.Test
 {
@@ -8,7 +12,7 @@ namespace WeatherWebApi.Test
         [Fact]
         public void ForecastResultDate()
         {
-
+            var Mock = new Mock<IWeatherStationCrud>();
         }
     }
 }
