@@ -21,50 +21,50 @@ namespace WeatherWebApi.Test
 
     }
     
-    [Fact]
-    public void TestForCorrectReturns()
-    {
-        // Arrange 
-        var mock = new Mock<IWeatherStationCrud>();
-        mock.Setup(mock => mock.GetType())
-            .Returns(GetTestWeatherForecast)
+    //[Fact]
+    //public void TestForCorrectReturns()
+    //{
+    //    // Arrange 
+    //    var mock = new Mock<IWeatherStationCrud>();
+    //    mock.Setup(mock => mock.GetType())
+    //        .Returns(GetTestWeatherForecast)
 
-    }
+    //}
 
-    private List<WeatherForecast> GetTestWeatherForecast()
-    {
-        var TestingPlace = new Place();
-        var forecast = new List<WeatherForecast>();
-        forecast.Add(new WeatherForecast()
-        {
-            Id = "Testing for day: number 1",
-            Date = new DateTime(2020, 12, 24),
-            Place = TestingPlace,
-            TemperatureC = 20,
-            Humidity = 60,
-            AirPressure = 15
-        });
+    //private List<WeatherForecast> GetTestWeatherForecast()
+    //{
+    //    var TestingPlace = new Place();
+    //    var forecast = new List<WeatherForecast>();
+    //    forecast.Add(new WeatherForecast()
+    //    {
+    //        Id = "Testing for day: number 1",
+    //        Date = new DateTime(2020, 12, 24),
+    //        Place = TestingPlace,
+    //        TemperatureC = 20,
+    //        Humidity = 60,
+    //        AirPressure = 15
+    //    });
 
-        forecast.Add(new WeatherForecast()
-        {
-            Id = "Testing for day: number 2",
-            Date = new DateTime(2020, 12, 24),
-            Place = TestingPlace,
-            TemperatureC = 20,
-            Humidity = 60,
-            AirPressure = 15
-        });
+    //    forecast.Add(new WeatherForecast()
+    //    {
+    //        Id = "Testing for day: number 2",
+    //        Date = new DateTime(2020, 12, 24),
+    //        Place = TestingPlace,
+    //        TemperatureC = 20,
+    //        Humidity = 60,
+    //        AirPressure = 15
+    //    });
 
-        forecast.Add(new WeatherForecast()
-        {
-            Id = "Testing for day: number 3",
-            Date = new DateTime(2020, 12, 24),
-            Place = TestingPlace,
-            TemperatureC = 20,
-            Humidity = 60,
-            AirPressure = 15
-        });
-        return forecast;
+    //    forecast.Add(new WeatherForecast()
+    //    {
+    //        Id = "Testing for day: number 3",
+    //        Date = new DateTime(2020, 12, 24),
+    //        Place = TestingPlace,
+    //        TemperatureC = 20,
+    //        Humidity = 60,
+    //        AirPressure = 15
+    //    });
+    //    return forecast;
 
-    }
+    //}
 }
