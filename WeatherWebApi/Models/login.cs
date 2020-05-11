@@ -10,7 +10,7 @@ namespace WeatherWebApi.Models
     public class login
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
