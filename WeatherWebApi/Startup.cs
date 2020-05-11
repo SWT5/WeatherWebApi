@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +13,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WeatherWebApi.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using WeatherWebApi.Hubs;
 using WeatherWebApi.Models;
+using WeatherWebApi.Services;
 
 namespace WeatherWebApi
 {
@@ -28,13 +33,30 @@ namespace WeatherWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<WeatherForecastContext>(opt =>
-            //    opt.UseInMemoryDatabase("weatherForecastList"));
-            //services.AddDbContext<WeatherForecastContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddControllers();
-            services.AddRazorPages();
+	        services.Configure<WeatherDatabaseSettings>(
+		        Configuration.GetSection(nameof(WeatherDatabaseSettings)));
+            
+            services.AddSingleton<IWeatherDatabaseSettings>(sp => sp.GetRequiredService<IOptions<WeatherDatabaseSettings>>().Value);
+
+            services.AddSingleton<IWeatherStationCrud>(sp => sp.GetService<WeatherStationCrud>());
+            services.AddAuthentication(options =>
+            {
+	            options.DefaultAuthenticateScheme = "Jwt";
+	            options.DefaultChallengeScheme = "JwT";
+            }).AddJwtBearer("Jwt", options =>
+            {
+	            options.TokenValidationParameters = new TokenValidationParameters
+	            {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+		            ValidateIssuerSigningKey = true,
+		            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Shhhhhh the key is a secret")),
+		            ValidateLifetime = true, //validate the expiration and not before values
+		            ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration
+	            };
+            });
+
+            services.AddCors();
             services.AddSignalR();
         }
 
@@ -53,6 +75,15 @@ namespace WeatherWebApi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+	            builder.WithOrigins("https://localhost:44341", "http://localhost:44341", "localhost:44341")
+		            .AllowAnyMethod()
+		            .AllowAnyHeader()
+		            .AllowCredentials();
+            });
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -61,7 +92,8 @@ namespace WeatherWebApi
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+	            endpoints.MapControllers();
+                endpoints.MapHub<Updates>("/updates");
             });
         }
     }

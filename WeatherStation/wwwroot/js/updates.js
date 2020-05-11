@@ -1,20 +1,20 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/updates").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44341/updates").build();
 
 connection.start();
 
 var delay = 500;
 setTimeout(function() {
-	connection.invoke("sendMessage");
+	connection.invoke("SendMsg");
 },
     delay
 );
 
-connection.on("sendMessage",
-	function(message) {
+connection.on("SendMsg",
+	function(msg) {
 		var li = document.createElement("li");
-		li.textContent = message;
+		li.textContent = msg;
 		document.getElementById("messagesList").appendChild(li);
     });
 
