@@ -14,29 +14,16 @@ namespace WeatherWebApi.Test
         [Fact]
         public void Test_Does_User_Exist()
         {
-            var mockS = new Mock<IuserCrud>();
-            mockS.Setup(mockS => mockS.Get())
+            var mo = new Mock<IuserCrud>();
+            mo.Setup(mo => mo.Get())
                 .Returns(RetrieveUser());
 
             //Create the controller in use 
-            var controller = new userController(mockS.Object);
+            var controller = new userController(mo.Object);
 
             var retrieved = controller.Get("KimJongUn");
 
-
-            Assert.Collection(retrieved.ToString(), item => Assert.Contains("KimJongUn", ));
-
-
-            //Assert.Equal("KimJongUn", retrieved.ToString());
-
-
-            //Assert.Collection(retrieved, item => Assert.Contains("KimJongUn", item.));
-
-            //assert that we did get the right user
-            //Assert.Collection(retrieved.ToString(), i => Assert.Contains("1337",));
-            //Assert.Contains("KimJongUn", retrieved.ToString());
-
-            //Assert.All(retrieved, i => Assert.Contains("1337",));
+            Assert.Collection(retrieved, item => Assert.Contains("KimJongUn", item.UserName)); 
 
         }
 
@@ -47,7 +34,6 @@ namespace WeatherWebApi.Test
             var UsersIn = new List<user>();
             UsersIn.Add(new user()
                 {
-                    UserId = "1337",
                     UserName = "KimJongUn",
                     PasswordHashed= "43243242"
                 });

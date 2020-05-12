@@ -74,9 +74,9 @@ namespace WeatherWebApi.Test
         public void IndexActionModelIsCompleted()
         {
             //Arrange
-            var controller = new WeatherForecastsController();
+            //var controller = new WeatherForecastsController();
             // Act
-            var model = (controller);
+            //var model = (controller);
 
         }
         

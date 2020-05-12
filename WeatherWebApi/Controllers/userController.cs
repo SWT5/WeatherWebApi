@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
@@ -23,18 +25,24 @@ namespace WeatherWebApi.Controllers
             _service = service;
         }
 
+        //[HttpGet("Register/{id}"), AllowAnonymous]
+        //public ActionResult<user> Get(string userName)
+        //{
+        //    var user = _service.GetUser(userName);
+
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return user;
+        //}
+
         [HttpGet("Register/{id}"), AllowAnonymous]
-        public ActionResult<user> Get(string userName)
+        public IEnumerable<user> Get(string userName)
         {
-            var user = _service.GetUser(userName);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-
+            return _service.Get()
+                .Where(u => (u.UserName == userName));
         }
 
         [HttpPost("Register"), AllowAnonymous]
