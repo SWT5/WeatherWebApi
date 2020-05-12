@@ -28,7 +28,7 @@ namespace WeatherWebApi.Test
             mock.Setup(mock => mock.Get())
                 .Returns(GetTestWeatherForecast);
             var controller = new WeatherForecastsController(mock.Object, fakehub.Object); //uut
-            var listOfTest = controller.GetWeatherObservation("Testing for day: number 1");
+            var listOfTest = controller.Get("Testing for day: number 1");
             //Assert
             Assert.Collection(listOfTest, item => Assert.Contains("Testing for day: number 1", item.ToString),
                 item=>Assert.Contains("Testing for day: number 2", item.ToString));
