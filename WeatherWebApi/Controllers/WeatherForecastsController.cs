@@ -52,7 +52,7 @@ namespace WeatherWebApi.Controllers
         public IEnumerable<WeatherForecast> Get(string id)
         {
             return _service.Get()
-                .Where(wf => wf.Date.Date.CompareTo(id) == 0)
+                .Where(wf => wf.Id == id)
                 .ToList();
         }
 

@@ -42,13 +42,7 @@ namespace WeatherWebApi.Models
         public double AirPressure { get; set; }
     }
 
-    public interface IPlace
-    {
-        string Name { get; set; }
-        double Latitude { get; set; }
-        double Longitude { get; set; }
-    }
-    public class SpecificPlace: IPlace
+    public class Place
     {
         public string Name { get; set; }
         public double Latitude { get; set; }

@@ -30,8 +30,7 @@ namespace WeatherWebApi.Test
             var controller = new WeatherForecastsController(mock.Object, fakehub.Object); //uut
             var listOfTest = controller.Get("Testing for day: number 1");
             //Assert
-            Assert.Collection(listOfTest, item => Assert.Contains("Testing for day: number 1", item.ToString),
-                item=>Assert.Contains("Testing for day: number 2", item.ToString));
+            Assert.Collection(listOfTest, item => Assert.Contains("Testing for day: number 1", item.Id));
 
         }
 
@@ -39,7 +38,7 @@ namespace WeatherWebApi.Test
         {
             //Arrange
             var forecast = new List<WeatherForecast>();
-            var TestingPlace = new SpecificPlace();
+            var TestingPlace = new Place();
             //Act
             forecast.Add(new WeatherForecast()
             {
@@ -73,17 +72,7 @@ namespace WeatherWebApi.Test
             return forecast;
             
         }
-        
-        //[Fact]
-        //public void IndexActionModelIsCompleted()
-        //{
-        //    //Arrange
-            
-        //    // Act
-          
 
-        //}
-        
 
 
     }
