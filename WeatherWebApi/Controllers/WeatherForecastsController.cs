@@ -35,17 +35,25 @@ namespace WeatherWebApi.Controllers
             _service.Get();
 
         // GET: api/WeatherForecasts/5
-        [HttpGet("{id}", Name = "GetObs")]
-        public ActionResult<WeatherForecast> GetWeatherObservation(string id)
+        //[HttpGet("{id}", Name = "GetObs")]
+        //public ActionResult<WeatherForecast> GetWeatherObservation(string id)
+        //{
+        //    var weatherForecast = _service.Get(id);
+
+        //    if (weatherForecast == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return weatherForecast;
+        //}
+
+        [HttpGet("{id}")]
+        public IEnumerable<WeatherForecast> Get(string id)
         {
-            var weatherForecast = _service.Get(id);
-
-            if (weatherForecast == null)
-            {
-                return NotFound();
-            }
-
-            return weatherForecast;
+            return _service.Get()
+                .Where(wf => wf.Id == id)
+                .ToList();
         }
 
         // PUT: api/WeatherForecasts/5

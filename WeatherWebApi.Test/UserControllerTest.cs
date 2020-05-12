@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Moq;
-using WeatherWebApi.Controllers;
-using WeatherWebApi.Models;
-using WeatherWebApi.Services;
-using Xunit;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Text;
+//using Moq;
+//using WeatherWebApi.Controllers;
+//using WeatherWebApi.Models;
+//using WeatherWebApi.Services;
+//using Xunit;
 
 namespace WeatherWebApi.Test
 {
@@ -21,7 +21,7 @@ namespace WeatherWebApi.Test
             //Create the controller in use 
             var controller = new userController(mo.Object);
 
-            var retrieved = controller.Get("KimJongUn");
+//            var retrieved = controller.Get("KimJongUn");
 
             Assert.Collection(retrieved, item => Assert.Contains("KimJongUn", item.UserName)); 
 
