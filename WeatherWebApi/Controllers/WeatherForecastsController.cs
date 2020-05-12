@@ -35,18 +35,18 @@ namespace WeatherWebApi.Controllers
             _service.Get();
 
         // GET: api/WeatherForecasts/5
-        //[HttpGet("{id}", Name = "GetObs")]
-        //public ActionResult<WeatherForecast> GetWeatherObservation(string id)
-        //{
-        //    var weatherForecast = _service.Get(id);
+        [HttpGet("{id}",Name = "GetObs")]
+        public ActionResult<WeatherForecast> GetWeatherObservation(string id)
+        {
+            var weatherForecast = _service.Get(id);
 
-        //    if (weatherForecast == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if(weatherForecast == null)
+            {
+                return NotFound();
+            }
 
-        //    return weatherForecast;
-        //}
+            return weatherForecast;
+        }
 
         [HttpGet("{id}")]
         public IEnumerable<WeatherForecast> Get(string id)
@@ -84,7 +84,7 @@ namespace WeatherWebApi.Controllers
         {
             _service.Create(weatherForecast);
 
-            _hubContext.Clients.All.SendAsync("SendMsg", JsonConvert.SerializeObject(weatherForecast));
+            _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherForecast));
 
             return CreatedAtRoute("GetObs", new { id = weatherForecast.Id.ToString() }, weatherForecast);
         }
