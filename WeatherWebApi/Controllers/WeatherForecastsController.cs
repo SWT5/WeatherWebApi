@@ -76,7 +76,7 @@ namespace WeatherWebApi.Controllers
         {
             _service.Create(weatherForecast);
 
-            _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherForecast));
+            _hubContext.Clients.All.SendAsync("SendMsg", JsonConvert.SerializeObject(weatherForecast));
 
             return CreatedAtRoute("GetObs", new { id = weatherForecast.Id.ToString() }, weatherForecast);
         }
