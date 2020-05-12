@@ -25,6 +25,7 @@ namespace WeatherWebApi.Test
 
             var ListOfTests = controller.Get(DateTest);
 
+            //testday
             Assert.Collection(ListOfTests, item=> Assert.Contains("TD20 #1", item.Id),
                 item => Assert.Contains("TD20 #2", item.Id));
             Assert.All(ListOfTests, item => Assert.DoesNotContain("TD10", item.Id));
