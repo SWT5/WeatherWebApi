@@ -1,25 +1,32 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44341/updates").build();
-//var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44370/Updates").build();
 
+var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44370/updates").build();
+//var connection = new signalR.HubConnectionBuilder().withUrl("/updates").build();
 
 connection.start();
 
 var delay = 500;
 setTimeout(function() {
-	connection.invoke("sendMessage");
+	connection.invoke("SendMessage");
 },
     delay
 );
 
-connection.on("sendMessage",
+connection.on("SendMessage",
 	function(message) {
 		var li = document.createElement("li");
 		li.textContent = message;
 		document.getElementById("messagesList").appendChild(li);
     });
 
+// hvis vi vil sende på subscripe button 
+//document.getElementById("subscribeBtn").addEventListener("click", function(event) {
+//	var message = document.getElementById("messagesList").value; 
+//	connection.invoke("sendMessage", message).catch(function(err) {
+//		return console.error(err.toString());
+//	})
+//});
 
 
 //connection.on("ReceiveMessage", function (user, message) {

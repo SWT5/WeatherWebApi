@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace WeatherWebApi.Hubs
 {
+    
     public class Updates:Hub
     {
-        public async Task SendMsg(string msg)
+        public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync("SendMsg", msg);
+            await Clients.All.SendAsync("SendMessage", message);    // hvad man kan ude på clienten 
         }
     }
 }
