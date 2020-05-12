@@ -31,7 +31,7 @@ namespace WeatherWebApi.Test
             Assert.All(ListOfTests, item => Assert.DoesNotContain("TD10", item.Id));
         }
 
-        // DUMMY DATA
+        // DUMMY DATAde pågl
         private List<WeatherForecast> GetDummyDataWeatherForecasts()
         {
             var place = new Place();

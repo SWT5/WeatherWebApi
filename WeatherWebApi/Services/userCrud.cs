@@ -21,22 +21,22 @@ namespace WeatherWebApi.Services
         private readonly IMongoCollection<user> _users;
         public userCrud(IWeatherStationDBSettings settings)
         {
-            var client = new MongoClient(settings.connectionString);
-            var database = client.GetDatabase(settings.DBName);
+            var client = new MongoClient("mongodb://127.0.0.1:27017/");
+            var database = client.GetDatabase("WeatherforecastDb");
 
             _users = database.GetCollection<user>(settings.userCollection);
         }
 
         public List<user> Get() =>
-           _users.Find(book => true).ToList();
+           _users.Find(user => true).ToList();
 
         public user GetUser(string id) =>
             _users.Find<user>(u => u.UserName == id).FirstOrDefault();
 
-        public user Create(user book)
+        public user Create(user User)
         {
-            _users.InsertOne(book);
-            return book;
+            _users.InsertOne(User);
+            return User;
         }
 
         public void Update(string id, user User) =>
