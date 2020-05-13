@@ -17,6 +17,7 @@ using WeatherWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using WeatherWebApi.Hubs;
 using WeatherWebApi.Models;
 using WeatherWebApi.Services;
@@ -25,9 +26,14 @@ namespace WeatherWebApi
 {
     public class Startup
     {
+        public static IMongoDatabase _database;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            List<Task> creatingTask = new List<Task>();
+            creatingTask.Add(_database.CreateCollectionAsync("login"));
+            creatingTask.Add(_database.CreateCollectionAsync("user"));
+            creatingTask.Add(_database.CreateCollectionAsync("WeatherForecast"));
         }
 
         public IConfiguration Configuration { get; }
@@ -91,15 +97,6 @@ namespace WeatherWebApi
             app.UseRouting();
 
             app.UseAuthorization();
-
-            //app.Map("/updates", map =>
-            //{
-	           // map.UseCors(CorsOptions.AlloeAll);
-	           // var hubConfiguration = new HubConfiguration
-	           // {
-		          //  Enable
-	           // }
-            //})
 
             app.UseEndpoints(endpoints =>
             {

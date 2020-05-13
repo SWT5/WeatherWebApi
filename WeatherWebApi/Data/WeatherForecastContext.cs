@@ -23,6 +23,10 @@ namespace WeatherWebApi.Data
         public string DBName { get; set; }
     }
 
+   
+
+
+
     //public class WeatherForecastContext : DbContext
     //{
     //    public WeatherForecastContext(DbContextOptions<WeatherForecastContext> options)
