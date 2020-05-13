@@ -13,16 +13,10 @@ namespace WeatherWebApi.Test
 {
     public class WeatherForecastControllerTest
     {
-        private IWeatherStationCrud _context;
-        //private WeatherForecast _forecast;
-        //private List<WeatherForecast> _forecastList;
-        //private WeatherForecastsController _uut;
-        private readonly IHubContext<Updates> _hubContext;
 
         [Fact]
         public void TestForCorrectReturns()
         {
-            
             var mock = new Mock<IWeatherStationCrud>();
             var fakehub = new Mock<IHubContext<Updates>>();
             mock.Setup(mock => mock.Get())
