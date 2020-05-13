@@ -1,12 +1,14 @@
 ﻿"use strict";
 
 
-var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44370/updates").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("ws://localhost:44370/updates")
+	.configureLogging(signalR.LogLevel.Debug)
+	.build();
 //var connection = new signalR.HubConnectionBuilder().withUrl("/updates").build();
 
 connection.start();
 
-var delay = 500;
+var delay = 1000;
 setTimeout(function() {
 	connection.invoke("SendMessage");
 },
@@ -18,7 +20,17 @@ connection.on("SendMessage",
 		var li = document.createElement("li");
 		li.textContent = message;
 		document.getElementById("messagesList").appendChild(li);
-    });
+	});
+
+// hente api behøves dette når man brguer signalR 
+//document.getElementById("subscribeBtn").addEventListener("click", function (event) {
+//    fetch('api/WeatherForecasts')
+//        .then()
+//        .catch((err) => {
+//            console.log(err.toString());
+//        });
+//    event.preventDefault();
+//});
 
 // hvis vi vil sende på subscripe button 
 //document.getElementById("subscribeBtn").addEventListener("click", function(event) {
