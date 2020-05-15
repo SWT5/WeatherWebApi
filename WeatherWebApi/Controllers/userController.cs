@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -36,20 +37,21 @@ namespace WeatherWebApi.Controllers
 
         //    return user;
         //}
-
+        //, Name = "GetUser"
 
         //WHAT???
-        [HttpGet("Register/{id}", Name = "GetUser"), AllowAnonymous]
-        public IEnumerable<user> Get(string userName)
+        [HttpGet("Register/{id}"), AllowAnonymous]
+        public IEnumerable<user> Get(string id)
         {
             return _service.Get()
-                .Where(u => (u.UserName == userName));
+                .Where(u => (u.UserName == id));
         }
 
         [HttpPost("Register"), AllowAnonymous]
-        public ActionResult<token> Register([FromBody] login UserInput)
+        public async Task<ActionResult<token>> Register([FromBody] login UserInput)
         {
-            if (_service.GetUser(UserInput.UserName) != null)
+            var dbUser = await _service.GetUser(UserInput.UserName);
+            if (dbUser != null)
             {
                 return BadRequest(new { errorMessage = "Username already exists" });
             }
@@ -67,10 +69,9 @@ namespace WeatherWebApi.Controllers
         }
 
         [HttpPost("Login"), AllowAnonymous]
-        public ActionResult<token> Login([FromBody] login loginUser)
+        public async Task<ActionResult<token>> Login([FromBody] login loginUser)
         {
-            loginUser.UserName = loginUser.UserName.ToLower();
-            var user = _service.GetUser(loginUser.UserName);
+            var user = await _service.GetUser(loginUser.UserName);
             if (user != null)
             {
                 var validPass = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.PasswordHashed);

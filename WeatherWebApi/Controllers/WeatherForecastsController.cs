@@ -79,11 +79,11 @@ namespace WeatherWebApi.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Authorize]
-        public ActionResult<WeatherForecast> PostWeatherForecast(WeatherForecast weatherForecast)
+        public async Task<ActionResult<WeatherForecast>> PostWeatherForecast(WeatherForecast weatherForecast)
         {
             _service.Create(weatherForecast);
 
-            _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherForecast));
+            await _hubContext.Clients.All.SendAsync("SendMessage", JsonConvert.SerializeObject(weatherForecast));
 
             return CreatedAtRoute("GetObs", new { id = weatherForecast.Id.ToString() }, weatherForecast);
         }

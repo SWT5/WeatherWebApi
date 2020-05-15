@@ -24,7 +24,7 @@ namespace WeatherWebApi.Controllers
         public IEnumerable<WeatherForecast> Get(DateTime tsOne, DateTime tsTwo)
         {
             return _servicesForecast.Get()
-                .Where(wf => (DateTime.Compare(wf.Date, tsOne) >= 0) &&
+                .Where(wf => (DateTime.Compare(wf.Date, tsOne) >= 0) ||
                              (DateTime.Compare(wf.Date, tsOne) <= 0))
                 .ToList();
         }

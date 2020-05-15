@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using WeatherWebApi.Models;
@@ -8,7 +10,7 @@ namespace WeatherWebApi.Services
     public interface IUserCrud
     {
         List<user> Get();
-        user GetUser(string id);
+        Task<user> GetUser(string id);
         user Create(user book);
         void Update(string id, user user);
         void Remove(user user);
@@ -29,8 +31,12 @@ namespace WeatherWebApi.Services
         public List<user> Get() =>
            _users.Find(user => true).ToList();
 
-        public user GetUser(string id) =>
-            _users.Find<user>(u => u.UserName == id).FirstOrDefault();
+        public async Task<user> GetUser(string id)
+        { 
+            var user = await _users.Find<user>(u => u.UserName == id).ToListAsync();
+           return user.FirstOrDefault();
+        }
+            
 
         public user Create(user User)
         {
