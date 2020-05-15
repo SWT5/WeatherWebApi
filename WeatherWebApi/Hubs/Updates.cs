@@ -11,7 +11,7 @@ namespace WeatherWebApi.Hubs
     {
         public async Task SendMessage(string message)
         {
-            await Clients.All.SendAsync("SendMessage", message);    // hvad man kan ude på clienten 
+            await Clients.All.SendAsync("SendMessage", message);    // sender til alle clients, som har subscribet til dette event
         }
     }
 }

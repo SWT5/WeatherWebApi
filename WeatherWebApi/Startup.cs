@@ -30,10 +30,6 @@ namespace WeatherWebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            List<Task> creatingTask = new List<Task>();
-            //creatingTask.Add(_database.CreateCollectionAsync("login"));
-            //creatingTask.Add(_database.CreateCollectionAsync("user"));
-            //creatingTask.Add(_database.CreateCollectionAsync("WeatherForecast"));
         }
 
         public IConfiguration Configuration { get; }

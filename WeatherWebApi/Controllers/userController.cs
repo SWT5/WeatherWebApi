@@ -18,28 +18,12 @@ namespace WeatherWebApi.Controllers
     public class userController : ControllerBase
     {
         private readonly IUserCrud _service;
-        //public readonly UserManager<User> _UserManager;
-
+     
         public userController(IUserCrud service)
         {
             _service = service;
         }
 
-        //[HttpGet("Register/{id}"), AllowAnonymous]
-        //public ActionResult<user> Get(string userName)
-        //{
-        //    var user = _service.GetUser(userName);
-
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return user;
-        //}
-        //, Name = "GetUser"
-
-        //WHAT???
         [HttpGet("Register/{id}"), AllowAnonymous]
         public IEnumerable<user> Get(string id)
         {

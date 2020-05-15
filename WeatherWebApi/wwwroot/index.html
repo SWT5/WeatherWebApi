@@ -1,21 +1,4 @@
-﻿<!--<header>
-    <script src="js/signalr/dist/browser/signalr.js"></script>
-    <script src="js/updates.js"></script>
-</header>
-<body>
-    <button id="subscribeBtn" class="btn btn-primary">Subscribe</button>
-
-
-    <div class="row">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
-
-
-</body>-->
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,6 +16,8 @@
 
 <script src="https://unpkg.com/@microsoft/signalr@3.0.1/dist/browser/signalr.js" crossorigin="anonymous"></script>
 <script>
+
+    //subscribe
     var connection = new signalR.HubConnectionBuilder().withUrl("/Updates").build();
 
     connection.on("SendMessage",
