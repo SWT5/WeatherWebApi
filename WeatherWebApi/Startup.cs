@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -13,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WeatherWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -31,9 +31,9 @@ namespace WeatherWebApi
         {
             Configuration = configuration;
             List<Task> creatingTask = new List<Task>();
-            creatingTask.Add(_database.CreateCollectionAsync("login"));
-            creatingTask.Add(_database.CreateCollectionAsync("user"));
-            creatingTask.Add(_database.CreateCollectionAsync("WeatherForecast"));
+            //creatingTask.Add(_database.CreateCollectionAsync("login"));
+            //creatingTask.Add(_database.CreateCollectionAsync("user"));
+            //creatingTask.Add(_database.CreateCollectionAsync("WeatherForecast"));
         }
 
         public IConfiguration Configuration { get; }
@@ -41,31 +41,38 @@ namespace WeatherWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-	        services.Configure<WeatherDatabaseSettings>(
-		        Configuration.GetSection(nameof(WeatherDatabaseSettings)));
-            
-            services.AddSingleton<IWeatherDatabaseSettings>(sp => sp.GetRequiredService<IOptions<WeatherDatabaseSettings>>().Value);
+            services.Configure<WeatherDatabaseSettings>(
+                Configuration.GetSection(nameof(WeatherDatabaseSettings)));
 
-            services.AddSingleton<IWeatherStationCrud>(sp => sp.GetService<WeatherStationCrud>());
+            services.AddSingleton<IWeatherDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<WeatherDatabaseSettings>>().Value);
+
+            services.AddSingleton<IWeatherStationCrud, WeatherStationCrud>();
+            services.AddSingleton<UserCrud>();
+
+            services.AddControllers();
+
+
             services.AddAuthentication(options =>
             {
-	            options.DefaultAuthenticateScheme = "Jwt";
-	            options.DefaultChallengeScheme = "JwT";
+                options.DefaultAuthenticateScheme = "Jwt";
+                options.DefaultChallengeScheme = "JwT";
             }).AddJwtBearer("Jwt", options =>
             {
-	            options.TokenValidationParameters = new TokenValidationParameters
-	            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateAudience = false,
                     ValidateIssuer = false,
-		            ValidateIssuerSigningKey = true,
-		            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("keep it secret keep it safe")),
-		            ValidateLifetime = true, //validate the expiration and not before values
-		            ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration
-	            };
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("keep it secret keep it safe")),
+                    ValidateLifetime = true, //validate the expiration and not before values
+                    ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration
+                };
             });
 
             services.AddCors();
             services.AddSignalR();
+            services.AddScoped<IUserCrud, UserCrud>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +89,7 @@ namespace WeatherWebApi
                 //app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseCors(builder =>
             {
@@ -96,7 +103,11 @@ namespace WeatherWebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
+            app.UseWebSockets();
 
             app.UseEndpoints(endpoints =>
             {

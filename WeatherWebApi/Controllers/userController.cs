@@ -7,7 +7,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Crypto.Generators;
 using WeatherWebApi.Models;
 using WeatherWebApi.Services;
 
@@ -15,12 +14,12 @@ namespace WeatherWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class userController : Controller
+    public class userController : ControllerBase
     {
-        private readonly IuserCrud _service;
+        private readonly IUserCrud _service;
         //public readonly UserManager<User> _UserManager;
 
-        public userController(IuserCrud service)
+        public userController(IUserCrud service)
         {
             _service = service;
         }
@@ -38,7 +37,9 @@ namespace WeatherWebApi.Controllers
         //    return user;
         //}
 
-        [HttpGet("Register/{id}"), AllowAnonymous]
+
+        //WHAT???
+        [HttpGet("Register/{id}", Name = "GetUser"), AllowAnonymous]
         public IEnumerable<user> Get(string userName)
         {
             return _service.Get()

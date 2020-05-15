@@ -12,7 +12,7 @@ namespace WeatherWebApi.Test
         [Fact]
         public void Test_Does_User_Exist()
         {
-            var mo = new Mock<IuserCrud>();
+            var mo = new Mock<IUserCrud>();
             mo.Setup(mo => mo.Get())
                 .Returns(RetrieveUser());
 

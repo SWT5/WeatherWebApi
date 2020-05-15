@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson.IO;
-using WeatherWebApi.Data;
 using WeatherWebApi.Models;
 using WeatherWebApi.Services;
 using WeatherWebApi.Hubs;
@@ -34,21 +33,21 @@ namespace WeatherWebApi.Controllers
         public ActionResult<IEnumerable<WeatherForecast>> GetWeatherObservations() =>
             _service.Get();
 
-        // GET: api/WeatherForecasts/5
-        [HttpGet("{id}",Name = "GetObs")]
-        public ActionResult<WeatherForecast> GetWeatherObservation(string id)
-        {
-            var weatherForecast = _service.Get(id);
+        //// GET: api/WeatherForecasts/5
+        //[HttpGet("{id}",Name = "GetObs")]
+        //public ActionResult<WeatherForecast> GetWeatherObservation(string id)
+        //{
+        //    var weatherForecast = _service.Get(id);
 
-            if(weatherForecast == null)
-            {
-                return NotFound();
-            }
+        //    if(weatherForecast == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return weatherForecast;
-        }
+        //    return weatherForecast;
+        //}
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetObs")]
         public IEnumerable<WeatherForecast> Get(string id)
         {
             return _service.Get()

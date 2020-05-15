@@ -9,7 +9,7 @@ using WeatherWebApi.Services;
 
 namespace WeatherWebApi.Controllers
 {
-    [Route("api/[controller/{id}/{id2}")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BoundaryDatesController : Controller
     {
@@ -20,7 +20,7 @@ namespace WeatherWebApi.Controllers
             _servicesForecast = service;
         }
 
-        [HttpGet]
+        [HttpGet("{tsOne}/{tsTwo}")]
         public IEnumerable<WeatherForecast> Get(DateTime tsOne, DateTime tsTwo)
         {
             return _servicesForecast.Get()

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using WeatherWebApi.Data;
 using WeatherWebApi.Models;
 
 namespace WeatherWebApi.Services
 {
-    public interface IuserCrud
+    public interface IUserCrud
     {
         List<user> Get();
         user GetUser(string id);
@@ -16,15 +15,15 @@ namespace WeatherWebApi.Services
         void Remove(string id);
     }
 
-    public class userCrud: IuserCrud
+    public class UserCrud: IUserCrud
     {
         private readonly IMongoCollection<user> _users;
-        public userCrud(IWeatherStationDBSettings settings)
+        public UserCrud(IWeatherDatabaseSettings settings)
         {
             var client = new MongoClient("mongodb://127.0.0.1:27017/");
             var database = client.GetDatabase("WeatherforecastDb");
 
-            _users = database.GetCollection<user>(settings.userCollection);
+            _users = database.GetCollection<user>("user");
         }
 
         public List<user> Get() =>

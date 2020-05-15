@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WeatherWebApi.Models;
-using WeatherWebApi.Data;
 
 namespace WeatherWebApi.Services
 {
@@ -22,24 +21,24 @@ namespace WeatherWebApi.Services
     public class WeatherStationCrud : IWeatherStationCrud
     {
         private readonly IMongoCollection<WeatherForecast> _weatherForecast;
-        public WeatherStationCrud(IWeatherStationDBSettings settings)
+        public WeatherStationCrud(IWeatherDatabaseSettings settings)
         {
-            var client = new MongoClient(settings.connectionString);
-            var database = client.GetDatabase(settings.DBName);
+            var client = new MongoClient("mongodb://127.0.0.1:27017/");
+            var database = client.GetDatabase("WeatherforecastDb");
 
-            _weatherForecast = database.GetCollection<WeatherForecast>(settings.weatherStationCollection);
+            _weatherForecast = database.GetCollection<WeatherForecast>("WeatherForecast");
         }
 
         public List<WeatherForecast> Get() =>
-            _weatherForecast.Find(book => true).ToList();
+            _weatherForecast.Find(weatherForecast => true).ToList();
 
         public WeatherForecast Get(string id) =>
             _weatherForecast.Find<WeatherForecast>(wo => wo.Id == id).FirstOrDefault();
 
-        public WeatherForecast Create(WeatherForecast book)
+        public WeatherForecast Create(WeatherForecast weatherForecast)
         {
-            _weatherForecast.InsertOne(book);
-            return book;
+            _weatherForecast.InsertOne(weatherForecast);
+            return weatherForecast;
         }
 
         public void Update(string id, WeatherForecast weatherForecast) =>
@@ -50,5 +49,8 @@ namespace WeatherWebApi.Services
 
         public void Remove(string id) =>
             _weatherForecast.DeleteOne(wo => wo.Id == id);
+
     }
+
+    
 }
