@@ -93,7 +93,7 @@ namespace WeatherWebApi.Controllers
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is the secret KEY!")),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is the secret KEY")),
                     SecurityAlgorithms.HmacSha256)),
                 new JwtPayload(claims));
 

@@ -1,0 +1,59 @@
+﻿<!--<header>
+    <script src="js/signalr/dist/browser/signalr.js"></script>
+    <script src="js/updates.js"></script>
+</header>
+<body>
+    <button id="subscribeBtn" class="btn btn-primary">Subscribe</button>
+
+
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+
+
+</body>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Weather Station</title>
+</head>
+<body>
+<center>
+
+    <h1>Weather Station</h1>
+    <p>
+        Welcome to the weather station - this site will update each time there is a new weather update!
+    </p>
+    <div id="messagesList"></div>
+</center>
+
+<script src="https://unpkg.com/@microsoft/signalr@3.0.1/dist/browser/signalr.js" crossorigin="anonymous"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/Updates").build();
+
+    connection.on("SendMessage",
+        function (msg) {
+            var rows = msg.split("\n");
+            rows.forEach(r => {
+                var li = document.createElement("li");
+                li.textContent = r;
+                document.getElementById("messagesList").appendChild(li);
+            });
+
+            var br = document.createElement("br");
+            document.getElementById("messagesList").appendChild(br);
+        });
+
+
+    connection.start().then(function () {
+        console.log("Connected");
+    }).catch(function (err) {
+        console.error(err.toString());
+    });
+</script>
+</body>
+</html>
