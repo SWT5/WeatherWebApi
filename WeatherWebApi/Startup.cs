@@ -64,7 +64,7 @@ namespace WeatherWebApi
                     ValidateAudience = false,
                     ValidateIssuer = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Sorry the key is a secret")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is the secret KEY!")),
                     ValidateLifetime = true, //validate the expiration and not before values
                     ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration
                 };
